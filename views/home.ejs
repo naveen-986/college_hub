@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#faf9ff">
+  <meta name="description" content="Campus Hub connects students with campus notices, clubs, lost and found, and teacher-provided study materials.">
+  <title>Campus Hub | Your Campus, Connected</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <%- include("partials/navbar") %>
+
+  <main>
+    <!-- Hero section -->
+    <section class="hero container">
+      <div class="hero-content">
+        <div class="eyebrow">
+          <span class="status-dot"></span>
+          YOUR CAMPUS, ONE PLATFORM
+        </div>
+
+        <h1>
+          Campus life,<br>
+          made <span>simpler.</span>
+        </h1>
+
+        <p class="hero-description">
+          Everything happening on your campus, all in one place.
+          Discover clubs, stay updated and access study materials
+          shared by your teachers.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/clubs" class="primary-btn">
+            Explore Clubs <span>↗</span>
+          </a>
+          <a href="/notices" class="secondary-btn">
+            View Notices
+          </a>
+        </div>
+
+        <div class="hero-note">
+          <span>✳</span> Built for students, by students.
+        </div>
+      </div>
+
+      <!-- Campus illustration -->
+      <div class="hero-visual">
+        <div class="visual-glow"></div>
+
+        <div class="floating-card top-card">
+          <span class="card-icon">📢</span>
+          <div>
+            <strong>Campus Updates</strong>
+            <small>Stay in the loop</small>
+          </div>
+          <span class="live-dot"></span>
+        </div>
+
+        <div class="campus-art">
+          <div class="sun"></div>
+          <div class="cloud cloud-one"></div>
+          <div class="cloud cloud-two"></div>
+
+          <div class="building building-back">
+            <div class="back-window"></div>
+          </div>
+
+          <div class="building building-main">
+            <div class="roof"></div>
+            <div class="columns">
+              <i></i><i></i><i></i><i></i>
+            </div>
+            <div class="building-door"></div>
+            <div class="building-windows">
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+
+          <div class="ground"></div>
+          <div class="tree tree-left">♣</div>
+          <div class="tree tree-right">♣</div>
+          <div class="path"></div>
+        </div>
+
+        <div class="floating-card bottom-card">
+          <span class="card-icon">📚</span>
+          <div>
+            <strong>Learn &amp; Grow</strong>
+            <small>Teacher-shared resources</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features section -->
+    <section class="features">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">YOUR CAMPUS TOOLKIT</p>
+            <h2>Everything you need.</h2>
+          </div>
+          <p class="section-description">
+            Less searching. More doing.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <!-- Notices -->
+          <a href="/notices" class="feature-card">
+            <div class="feature-top">
+              <span class="feature-icon purple">📢</span>
+              <span class="feature-arrow">↗</span>
+            </div>
+            <h3>Notice Board</h3>
+            <p>
+              Important announcements, academic updates and
+              campus information in one place.
+            </p>
+            <span class="feature-link">Explore notices ↗</span>
+          </a>
+
+          <!-- Clubs -->
+          <a href="/clubs" class="feature-card">
+            <div class="feature-top">
+              <span class="feature-icon orange">🚀</span>
+              <span class="feature-arrow">↗</span>
+            </div>
+            <h3>Student Clubs</h3>
+            <p>
+              Discover coding, robotics, cultural and other
+              student clubs. Find your community.
+            </p>
+            <span class="feature-link">Discover clubs ↗</span>
+          </a>
+
+          <!-- Lost and Found -->
+          <a href="/lost-found" class="feature-card">
+            <div class="feature-top">
+              <span class="feature-icon green">🔎</span>
+              <span class="feature-arrow">↗</span>
+            </div>
+            <h3>Lost &amp; Found</h3>
+            <p>
+              Report missing belongings and help fellow
+              students find their lost items.
+            </p>
+            <span class="feature-link">Find an item ↗</span>
+          </a>
+
+          <!-- Teacher notes -->
+          <a href="/notes" class="feature-card">
+            <div class="feature-top">
+              <span class="feature-icon blue">📚</span>
+              <span class="feature-arrow">↗</span>
+            </div>
+            <h3>Notes Library</h3>
+            <p>
+              Access teacher-provided notes, subject materials
+              and reference PDFs for your studies.
+            </p>
+            <span class="feature-link">Explore study materials ↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to action -->
+    <section class="cta-section container">
+      <div class="cta-card">
+        <div>
+          <p class="section-label">MAKE THE MOST OF CAMPUS</p>
+          <h2>Your campus journey starts here.</h2>
+          <p>
+            Stay connected with campus life, explore opportunities
+            and make every semester count.
+          </p>
+        </div>
+        <a href="/clubs" class="primary-btn">
+          Get Started <span>↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <%- include("partials/footer") %>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>

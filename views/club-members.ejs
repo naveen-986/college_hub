@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View the approved members of this Campus Hub club.">
+  <title><%= club.name %> Members | Campus Hub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    .members-page {
+      padding-top: 48px;
+      padding-bottom: 72px;
+      min-height: 65vh;
+    }
+
+    .members-back {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: var(--muted);
+    }
+
+    .members-heading {
+      margin-bottom: 30px;
+    }
+
+    .members-heading h1 {
+      margin: 8px 0;
+    }
+
+    .members-heading p {
+      color: var(--muted);
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .member-card {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--white);
+    }
+
+    .member-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .member-avatar {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #eee9ff;
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .member-name {
+      overflow-wrap: anywhere;
+      font-size: 17px;
+      margin: 0 0 5px;
+    }
+
+    .member-role {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #eee9ff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .member-info {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .member-info strong {
+      color: var(--text, #25213a);
+    }
+
+    .members-empty {
+      padding: 40px 20px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+    }
+
+    .members-empty p {
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("partials/navbar", { activePage: "clubs" }) %>
+
+  <main class="members-page container">
+    <a
+      class="members-back"
+      href="/clubs/<%= encodeURIComponent(club.slug) %>"
+    >
+      ← Back to <%= club.name %>
+    </a>
+
+    <div class="members-heading">
+      <span class="clubs-tag">OUR COMMUNITY</span>
+      <h1><%= club.name %> Members</h1>
+      <p>
+        Meet the students who are part of this club.
+        <strong><%= members.length %></strong> approved
+        <%= members.length === 1 ? "member" : "members" %>.
+      </p>
+    </div>
+
+    <% if (members.length > 0) { %>
+      <div class="members-grid">
+        <% members.forEach((membership) => { %>
+          <% const member = membership.student; %>
+
+          <article class="member-card">
+            <div class="member-top">
+              <div class="member-avatar" aria-hidden="true">
+                <%= member.name.charAt(0).toUpperCase() %>
+              </div>
+
+              <div>
+                <h2 class="member-name"><%= member.name %></h2>
+                <span class="member-role">
+                  <%= membership.clubRole %>
+                </span>
+              </div>
+            </div>
+
+            <div class="member-info">
+              <div>
+                <strong>Branch:</strong>
+                <%= member.branch || "Not provided" %>
+              </div>
+
+              <div>
+                <strong>Year:</strong>
+                <%= member.year || "Not provided" %>
+              </div>
+
+              <% if (member.showPhone && member.phone) { %>
+                <div>
+                  <strong>Phone:</strong>
+                  <a href="tel:<%= member.phone %>">
+                    <%= member.phone %>
+                  </a>
+                </div>
+              <% } %>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="members-empty">
+        <h2>No approved members yet</h2>
+        <p>
+          Members will appear here after their club requests
+          have been approved by an administrator.
+        </p>
+      </div>
+    <% } %>
+  </main>
+
+  <%- include("partials/footer") %>
+</body>
+</html>

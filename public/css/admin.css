@@ -1,0 +1,286 @@
+
+/* Admin Club Form */
+
+.admin-page {
+  max-width: 820px;
+  padding-top: 36px;
+  padding-bottom: 64px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 22px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-form-card {
+  padding: 36px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--white);
+  box-shadow: 0 12px 40px rgba(30, 25, 70, 0.05);
+}
+
+.admin-tag {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.admin-form-card h1 {
+  margin: 12px 0;
+  color: var(--dark);
+  font-size: 32px;
+}
+
+.admin-description {
+  margin-bottom: 28px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.form-group {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--dark);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.admin-submit-btn {
+  padding: 13px 22px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-submit-btn:hover {
+  background: var(--primary-dark);
+}
+
+.form-message {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+
+.error-message {
+  background: #fff0f0;
+  color: #a42626;
+}
+
+@media (max-width: 600px) {
+  .admin-page {
+    padding-top: 24px;
+  }
+
+  .admin-form-card {
+    padding: 22px;
+  }
+
+  .admin-form-card h1 {
+    font-size: 26px;
+  }
+}
+
+/* edit club page  */
+
+
+/* ===== Edit Club Page ===== */
+
+.admin-container {
+  width: min(100% - 32px, 720px);
+  margin: 48px auto;
+  padding: 32px;
+  background: #ffffff;
+  border: 1px solid #e9e5f5;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(40, 25, 80, 0.08);
+}
+
+.admin-container h1 {
+  margin: 0 0 8px;
+  color: #241547;
+  font-size: 30px;
+  font-weight: 750;
+}
+
+.admin-container h2 {
+  margin: 28px 0 14px;
+  padding-top: 20px;
+  border-top: 1px solid #eeeaf5;
+  color: #35245e;
+  font-size: 19px;
+}
+
+.admin-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.admin-container label {
+  margin-top: 8px;
+  color: #39334b;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.admin-container input,
+.admin-container textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #ddd7eb;
+  border-radius: 9px;
+  background: #fcfbff;
+  color: #211a32;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-container input:focus,
+.admin-container textarea:focus {
+  border-color: #7654d8;
+  box-shadow: 0 0 0 3px rgba(118, 84, 216, 0.13);
+}
+
+.admin-container textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.admin-container input[type="date"] {
+  min-height: 44px;
+}
+
+.admin-container button[type="submit"] {
+  margin-top: 20px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7654d8, #5b3bb8);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-container button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(91, 59, 184, 0.23);
+}
+
+.admin-container > a {
+  display: inline-block;
+  margin-top: 16px;
+  color: #6845c5;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-container > a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+  .admin-container {
+    width: auto;
+    margin: 20px 14px;
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+
+  .admin-container h1 {
+    font-size: 25px;
+  }
+
+  .admin-container input,
+  .admin-container textarea {
+    font-size: 16px;
+  }
+}
+
+
+/* create admin css */
+
+
+.form-error {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+
+.admin-page-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.admin-page-actions .edit-club-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #6845d5;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.admin-page-actions .edit-club-btn:hover {
+  background: #5034b0;
+}

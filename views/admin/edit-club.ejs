@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Edit Club | Campus Hub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+
+<body>
+  <%- include("../partials/navbar") %>
+
+  <main class="admin-container edit-club-container">
+
+    <header class="edit-club-header">
+      <h1>Edit Club Details</h1>
+      <p>
+        Update information, publish announcements, and manage activities
+        for <strong><%= club.name %></strong>.
+      </p>
+    </header>
+
+    <form
+      action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/edit"
+      method="POST"
+    >
+
+      <!-- Club Information -->
+      <section class="edit-section">
+        <h2>Club Information</h2>
+        <p class="section-description">
+          Update the basic details displayed on your club page.
+        </p>
+
+        <label for="name">Club Name</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value="<%= club.name %>"
+          required
+        >
+
+        <label for="category">Category</label>
+        <input
+          id="category"
+          name="category"
+          type="text"
+          value="<%= club.category %>"
+          required
+        >
+
+        <label for="emoji">Club Emoji</label>
+        <input
+          id="emoji"
+          name="emoji"
+          type="text"
+          value="<%= club.emoji || '🎓' %>"
+          placeholder="🎓"
+        >
+
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          required
+        ><%= club.description %></textarea>
+      </section>
+
+      <!-- Post Club Update -->
+      <section class="edit-section">
+        <h2>📢 Post Club Update</h2>
+        <p class="section-description">
+          Share announcements, workshop details, event news, or important
+          information with students.
+        </p>
+
+        <label for="updateTitle">Update Title</label>
+        <input
+          id="updateTitle"
+          type="text"
+          name="updateTitle"
+          placeholder="e.g. Upcoming Workshop"
+        >
+
+        <label for="updateContent">Update Details</label>
+        <textarea
+          id="updateContent"
+          name="updateContent"
+          rows="4"
+          placeholder="Write your club announcement..."
+        ></textarea>
+
+        <span class="form-hint">
+          Leave both fields empty if you only want to edit club details.
+        </span>
+      </section>
+
+      <!-- Activities -->
+      <section class="edit-section">
+        <h2>Club Activities</h2>
+        <p class="section-description">
+          Add the activities organised by this club, one per line.
+        </p>
+
+        <label for="activities">Activities</label>
+        <textarea
+          id="activities"
+          name="activities"
+          placeholder="Coding competitions&#10;Workshops&#10;Team projects"
+        ><%= (club.activities || []).join("\n") %></textarea>
+
+        <span class="form-hint">
+          Enter each activity on a separate line.
+        </span>
+      </section>
+
+      <!-- Upcoming Event -->
+      <section class="edit-section">
+        <h2>📅 Upcoming Event</h2>
+        <p class="section-description">
+          Update the club's upcoming event information.
+        </p>
+
+        <label for="eventName">Event Name</label>
+        <input
+          id="eventName"
+          name="eventName"
+          type="text"
+          value="<%= club.events?.[0]?.name || '' %>"
+          placeholder="e.g. Annual Tech Workshop"
+        >
+
+        <label for="eventDate">Event Date</label>
+        <input
+          id="eventDate"
+          name="eventDate"
+          type="date"
+          value="<%= club.events?.[0]?.date && !isNaN(new Date(club.events[0].date).getTime()) ? new Date(club.events[0].date).toISOString().slice(0, 10) : '' %>"
+        >
+      </section>
+
+      
+<!-- Club Updates / Announcements -->
+<section class="detail-section">
+  <h2>📢 Club Updates</h2>
+
+  <p class="section-description">
+    Latest announcements, workshops, and important news from this club.
+  </p>
+
+  <% if (club.updates && club.updates.length > 0) { %>
+
+    <div class="club-updates-list">
+      <% club.updates.slice().reverse().forEach((update) => { %>
+
+        <article class="club-update-card">
+          <div class="club-update-header">
+            <h3><%= update.title %></h3>
+            <span class="club-update-badge">Announcement</span>
+          </div>
+
+          <% if (update.publishedAt) { %>
+            <p class="club-update-date">
+              Posted on
+              <%= new Date(update.publishedAt).toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+              }) %>
+            </p>
+          <% } %>
+
+          <p class="club-update-content"><%= update.content %></p>
+        </article>
+
+      <% }) %>
+    </div>
+
+  <% } else { %>
+
+    <div class="empty-section">
+      No club announcements yet. Check back soon!
+    </div>
+
+  <% } %>
+</section>
+
+
+      <!-- Form Actions -->
+      <div class="edit-club-actions">
+        <button type="submit" class="save-club-btn">
+          Save Changes &amp; Post Update
+        </button>
+
+        <a
+          href="/clubs/<%= encodeURIComponent(club.slug) %>"
+          class="cancel-club-btn"
+        >
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </main>
+</body>
+</html>

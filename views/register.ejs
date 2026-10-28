@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Campus Hub</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-page">
+  <main class="auth-main">
+    <div class="auth-layout">
+      <section class="auth-visual">
+        <a href="/" class="auth-brand">Campus Hub.</a>
+
+        <div class="auth-visual-content">
+          <h2>Make campus<br>life count.</h2>
+          <p>
+            Join your campus community, discover new interests,
+            and make the most of student life.
+          </p>
+        </div>
+
+        <div class="auth-benefits">
+          <div class="auth-benefit">
+            <span class="auth-benefit-icon">✦</span>
+            <span>Find clubs that match your interests</span>
+          </div>
+          <div class="auth-benefit">
+            <span class="auth-benefit-icon">✓</span>
+            <span>Keep up with campus activities</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-form-panel">
+        <div class="auth-form-heading">
+          <span class="auth-eyebrow">Get started</span>
+          <h1>Create your account</h1>
+          <p>Join Campus Hub in just a few steps.</p>
+        </div>
+
+        <% if (error) { %>
+          <div class="auth-error" role="alert"><%= error %></div>
+        <% } %>
+
+        <form class="auth-form" action="/register" method="POST">
+          <div class="auth-field">
+            <label for="name">Full name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Enter your full name"
+              maxlength="80"
+              required
+            >
+          </div>
+
+          <div class="auth-field">
+            <label for="email">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              maxlength="254"
+              required
+            >
+          </div>
+
+          
+<div class="auth-field">
+  <label for="phone">Phone Number</label>
+  <input
+    id="phone"
+    name="phone"
+    type="tel"
+    autocomplete="tel"
+    placeholder="Enter your phone number"
+    maxlength="20"
+  >
+</div>
+
+<div class="auth-field">
+  <label>
+    <input
+      type="checkbox"
+      name="showPhone"
+      value="yes"
+    >
+    I agree to display my phone number in the public club members directory.
+  </label>
+</div>
+
+
+          <div class="auth-field">
+            <label for="branch">Branch / Department</label>
+            <input
+              id="branch"
+              name="branch"
+              type="text"
+              placeholder="e.g. AI & ML, CSE, IT"
+              maxlength="100"
+              required
+            >
+          </div>
+
+          <div class="auth-field">
+            <label for="year">Year of study</label>
+            <select id="year" name="year" required>
+              <option value="">Select your year</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+
+          <div class="auth-field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="72"
+              placeholder="At least 8 characters"
+              required
+            >
+          </div>
+
+          <button class="auth-submit" type="submit">
+            Create Account →
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Already have an account?
+          <a href="/login">Sign in</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="auth-footer">
+    © <%= new Date().getFullYear() %> Campus Hub. Built for campus life.
+  </footer>
+</body>
+</html>

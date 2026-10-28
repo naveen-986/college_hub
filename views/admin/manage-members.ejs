@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Manage Members | Campus Hub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/manage-members.css">
+</head>
+
+<body>
+  <%- include("../partials/navbar", { activePage: "clubs" }) %>
+
+  <main class="manage-members-page">
+    <a class="members-back" href="/clubs">← Back to Clubs</a>
+
+    <h1>Manage Members</h1>
+    <p>
+      Club: <strong><%= club.name %></strong>
+    </p>
+
+    <section class="members-panel">
+      <h2>Add a Member</h2>
+      <p>
+        Enter the email address the student used to register on Campus Hub.
+      </p>
+
+      <form
+        class="members-form"
+        action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/members"
+        method="POST"
+      >
+        <div>
+          <label for="email">Student Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="student@example.com"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="clubRole">Assign Club Role</label>
+          <select id="clubRole" name="clubRole" required>
+            <option value="Member">Member</option>
+            <option value="Coordinator">Coordinator</option>
+            <option value="President">President</option>
+            <option value="Vice President">Vice President</option>
+            <option value="Secretary">Secretary</option>
+            <option value="Joint Secretary">Joint Secretary</option>
+          </select>
+        </div>
+
+        <button type="submit">Add Member</button>
+      </form>
+    </section>
+
+    <section class="members-panel">
+      <h2>Current Members (<%= members.length %>)</h2>
+
+      <% if (members.length > 0) { %>
+        <div class="members-table-wrap">
+          <table class="members-table">
+           
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Branch</th>
+    <th>Year</th>
+    <th>Club Role</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
+<tbody>
+  <% members.forEach((membership) => { %>
+    <tr>
+      <td><%= membership.student.name %></td>
+      <td><%= membership.student.email %></td>
+      <td><%= membership.student.branch || "-" %></td>
+      <td><%= membership.student.year || "-" %></td>
+
+      <td>
+        <form
+          class="member-role-form"
+          action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/members/<%= membership._id %>/role"
+          method="POST"
+        >
+          <select name="clubRole" aria-label="Update role">
+            <% [
+              "President",
+              "Vice President",
+              "Secretary",
+              "Joint Secretary",
+              "Coordinator",
+              "Member"
+            ].forEach((role) => { %>
+              <option
+                value="<%= role %>"
+                <%= membership.clubRole === role ? "selected" : "" %>
+              >
+                <%= role %>
+              </option>
+            <% }) %>
+          </select>
+
+          <button type="submit" class="update-role-btn">
+            Update Role
+          </button>
+        </form>
+      </td>
+
+      <td>
+        <form
+          action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/members/<%= membership._id %>/remove"
+          method="POST"
+          onsubmit="return confirm('Remove this student from the club? Their Campus Hub account will not be deleted.');"
+        >
+          <button type="submit" class="remove-member-btn">
+            Remove
+          </button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
+
+          </table>
+        </div>
+      <% } else { %>
+        <p>No approved members in this club yet.</p>
+      <% } %>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+</body>
+</html>

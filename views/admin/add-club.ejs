@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Club | Campus Hub</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container">
+      <a href="/" class="logo">Campus Hub</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/clubs">Clubs</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="admin-page container">
+    <a href="/clubs" class="back-link">← Back to Clubs</a>
+
+    <section class="admin-form-card">
+
+      <!-- Admin-only actions -->
+      <% if (currentUser && currentUser.role === "admin") { %>
+        <div class="admin-page-actions">
+          <a href="/admin/register" class="edit-club-btn">
+            + Create Admin Account
+          </a>
+        </div>
+      <% } %>
+   
+
+      <span class="admin-tag">CLUB MANAGEMENT</span>
+      <br>
+         <a href="/admin/club-requests" class="edit-club-btn">
+  View Club Requests
+</a>
+      <h1>Add a New Club</h1>
+      <p class="admin-description">
+        Add a student community to Campus Hub.
+      </p>
+
+    
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="form-message error-message">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/admin/clubs" method="POST">
+        <div class="form-group">
+          <label for="name">Club Name</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="e.g. AI & ML Club"
+            maxlength="80"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <input
+            id="category"
+            name="category"
+            type="text"
+            placeholder="e.g. Technology"
+            maxlength="60"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="emoji">Club Emoji</label>
+          <input
+            id="emoji"
+            name="emoji"
+            type="text"
+            placeholder="e.g. 🤖"
+            maxlength="12"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            maxlength="1000"
+            placeholder="What is this club about?"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="activities">Activities</label>
+          <textarea
+            id="activities"
+            name="activities"
+            rows="4"
+            placeholder="Enter one activity per line"
+          ></textarea>
+          <small>Example: Coding contests, Hackathons, Workshops</small>
+        </div>
+
+        <div class="form-group">
+          <label for="eventName">Upcoming Event Name</label>
+          <input
+            id="eventName"
+            name="eventName"
+            type="text"
+            placeholder="e.g. Coding Competition"
+            maxlength="100"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="eventDate">Event Date</label>
+          <input
+            id="eventDate"
+            name="eventDate"
+            type="date"
+          >
+        </div>
+
+        <button type="submit" class="admin-submit-btn">
+          Save Club ↗
+        </button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

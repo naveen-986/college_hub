@@ -1,0 +1,301 @@
+
+/* ==============================
+   MANAGE MEMBERS PAGE
+============================== */
+
+.manage-members-page {
+  width: min(1100px, 92%);
+  margin: 45px auto 70px;
+  color: #191b35;
+}
+
+.members-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #5b4bdb;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.members-back:hover {
+  color: #3829ad;
+}
+
+.manage-members-page > h1 {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.manage-members-page > p {
+  margin: 0 0 30px;
+  color: #686b80;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.manage-members-page > p strong {
+  color: #5145cd;
+}
+
+/* ==============================
+   PANELS / CARDS
+============================== */
+
+.members-panel {
+  margin-bottom: 28px;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e8e7f1;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(36, 30, 90, 0.06);
+}
+
+.members-panel h2 {
+  margin: 0 0 10px;
+  color: #191b35;
+  font-size: 23px;
+  font-weight: 750;
+}
+
+.members-panel > p {
+  margin: 0 0 24px;
+  color: #77798e;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* ==============================
+   ADD MEMBER FORM
+============================== */
+
+.members-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  max-width: 850px;
+}
+
+.members-form > div {
+  min-width: 0;
+}
+
+.members-form label {
+  display: block;
+  margin-bottom: 9px;
+  color: #292b45;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.members-form input,
+.members-form select {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  color: #25263e;
+  background: #fbfbfe;
+  border: 1px solid #dedfeb;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.members-form input::placeholder {
+  color: #a0a1b2;
+}
+
+.members-form input:focus,
+.members-form select:focus {
+  background: #ffffff;
+  border-color: #7162e8;
+  box-shadow: 0 0 0 4px rgba(113, 98, 232, 0.12);
+}
+
+/* Add button */
+
+.members-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 47px;
+  padding: 12px 24px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #6c5ce7, #5145cd);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(81, 69, 205, 0.18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.members-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 22px rgba(81, 69, 205, 0.26);
+}
+
+.members-form button:active {
+  transform: translateY(0);
+}
+
+/* ==============================
+   MEMBERS TABLE
+============================== */
+
+.members-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e9e9f2;
+  border-radius: 12px;
+}
+
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  text-align: left;
+}
+
+.members-table thead {
+  background: #f6f5ff;
+}
+
+.members-table th {
+  padding: 16px 18px;
+  color: #5145cd;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.members-table td {
+  padding: 16px 18px;
+  color: #555970;
+  font-size: 14px;
+  border-top: 1px solid #efeff5;
+  white-space: nowrap;
+}
+
+.members-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.members-table tbody tr:hover {
+  background: #faf9ff;
+}
+
+.members-table td:first-child {
+  color: #25263e;
+  font-weight: 650;
+}
+
+/* Empty members message */
+
+.members-panel > p:last-child {
+  line-height: 1.8;
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+============================== */
+
+@media (max-width: 700px) {
+  .manage-members-page {
+    width: 92%;
+    margin: 28px auto 45px;
+  }
+
+  .members-panel {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .members-panel h2 {
+    font-size: 20px;
+  }
+
+  .members-form {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .members-form button {
+    grid-column: auto;
+    width: 100%;
+  }
+
+  .members-table th,
+  .members-table td {
+    padding: 13px 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .members-panel {
+    padding: 16px;
+  }
+
+  .manage-members-page > h1 {
+    font-size: 27px;
+  }
+}
+
+.member-role-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.member-role-form select {
+  min-width: 145px;
+  padding: 9px;
+  border: 1px solid #dedfeb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.update-role-btn,
+.remove-member-btn {
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.update-role-btn {
+  color: #fff;
+  background: #5145cd;
+}
+
+.remove-member-btn {
+  color: #b42318;
+  background: #feeceb;
+}
+
+.update-role-btn:hover {
+  background: #3e32ad;
+}
+
+.remove-member-btn:hover {
+  background: #fbd5d2;
+}

@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Admin | Campus Hub</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <main class="admin-container">
+    <h1>Create Admin Account</h1>
+    <p>Create an administrator account for Campus Hub.</p>
+
+    <% if (error) { %>
+      <p class="form-error" role="alert"><%= error %></p>
+    <% } %>
+
+    <form action="/admin/register" method="POST">
+      <label for="name">Full Name</label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        maxlength="80"
+        autocomplete="name"
+        required
+      >
+
+      <label for="email">Email Address</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        minlength="8"
+        maxlength="72"
+        autocomplete="new-password"
+        required
+      >
+
+      <button type="submit">Create Admin</button>
+    </form>
+
+    <a href="/clubs">Back to Clubs</a>
+    
+<div class="admin-actions">
+  <a href="/clubs" class="edit-club-btn">
+    Back to Clubs
+  </a>
+
+  <a href="/admin/register" class="edit-club-btn">
+    + Create Admin Account
+  </a>
+</div>
+
+  </main>
+</body>
+</html>

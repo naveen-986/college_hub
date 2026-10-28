@@ -1,0 +1,44 @@
+
+<header class="site-header">
+  <nav class="navbar container">
+
+    <a href="/" class="logo">
+      Campus<span>Hub.</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="<%= typeof activePage !== 'undefined' && activePage === 'home' ? 'active' : '' %>">Home</a>
+      <a href="/notices" class="<%= typeof activePage !== 'undefined' && activePage === 'notices' ? 'active' : '' %>">Notices</a>
+      <a href="/clubs" class="<%= typeof activePage !== 'undefined' && activePage === 'clubs' ? 'active' : '' %>">Clubs</a>
+      <a href="/lost-found" class="<%= typeof activePage !== 'undefined' && activePage === 'lost-found' ? 'active' : '' %>">Lost &amp; Found</a>
+      <a href="/notes" class="<%= typeof activePage !== 'undefined' && activePage === 'notes' ? 'active' : '' %>">Notes</a>
+    </div>
+
+    <div class="nav-actions">
+      <% if (currentUser) { %>
+
+        <% if (currentUser.role === 'admin') { %>
+          <a href="/admin/clubs/new" class="login-btn">Admin Panel</a>
+        <% } %>
+
+        <span class="navbar-user">
+  Hi, <%= currentUser.name %>
+  <span class="navbar-user-role">
+    <%= currentUser.displayRole %>
+  </span>
+</span>
+
+        <form action="/logout" method="POST" class="navbar-logout-form">
+          <button type="submit" class="login-btn">Logout</button>
+        </form>
+
+      <% } else { %>
+
+        <a href="/login" class="login-btn">Login</a>
+        <a href="/register" class="register-btn">Register ↗</a>
+
+      <% } %>
+    </div>
+
+  </nav>
+</header>

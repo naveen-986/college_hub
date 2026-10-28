@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= club.name %> | Campus Hub</title>
+  <meta
+    name="description"
+    content="Discover the activities, events and members of the <%= club.name %> at Campus Hub."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/club-details.css">
+
+  <style>
+    .club-details {
+      padding-top: 32px;
+      padding-bottom: 64px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      text-decoration: none;
+    }
+
+    .club-detail-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 56px 32px;
+      text-align: center;
+      border: 1px solid #e8e5fa;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #f0edff, #ffffff 75%);
+    }
+
+    .club-detail-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 20px;
+      border-radius: 26px;
+      background: #ffffff;
+      font-size: 48px;
+      box-shadow: 0 8px 28px rgba(70, 55, 150, 0.08);
+    }
+
+    .club-category-label {
+      margin-bottom: 12px;
+      color: #6655e8;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .club-detail-hero h1 {
+      margin: 0 0 16px;
+      color: #191b35;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.2;
+    }
+
+    .club-description {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #686b83;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .club-detail-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .club-detail-actions .join-club-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 14px 22px;
+      border: 1px solid #6655e8;
+      border-radius: 12px;
+      background: #6655e8;
+      color: #ffffff;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .club-detail-actions .join-club-btn:hover {
+      transform: translateY(-2px);
+      background: #5140d4;
+    }
+
+    .club-detail-actions .secondary-btn {
+      border-color: #dedaf8;
+      background: #ffffff;
+      color: #5140d4;
+    }
+
+    .club-detail-actions .secondary-btn:hover {
+      background: #f5f3ff;
+    }
+
+    .club-detail-actions form {
+      margin: 0;
+    }
+
+    .membership-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border: 1px solid #d9d4fb;
+      border-radius: 12px;
+      background: #f4f2ff;
+      color: #5140d4;
+      font-weight: 700;
+    }
+
+    .detail-section {
+      margin-top: 48px;
+    }
+
+    .detail-section h2 {
+      margin-bottom: 10px;
+      color: #191b35;
+      font-size: 28px;
+    }
+
+    .section-description {
+      margin-bottom: 24px;
+      color: #686b83;
+      line-height: 1.7;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .activity-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px;
+      border: 1px solid #e8e5f5;
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    .activity-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #eeebff;
+      color: #6655e8;
+      font-weight: 800;
+    }
+
+    .activity-card p {
+      margin: 3px 0 0;
+      line-height: 1.6;
+    }
+
+    .events-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .event-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px;
+      border: 1px solid #e8e5f5;
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    .event-card h3 {
+      margin: 0 0 8px;
+    }
+
+    .event-card p {
+      margin: 0;
+      color: #686b83;
+      line-height: 1.6;
+    }
+
+    .event-date {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      border-radius: 9px;
+      background: #f0edff;
+      color: #5140d4;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .empty-section {
+      padding: 24px;
+      border: 1px dashed #dedaf0;
+      border-radius: 16px;
+      color: #686b83;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .club-details {
+        padding-top: 20px;
+      }
+
+      .club-detail-hero {
+        padding: 36px 18px;
+        border-radius: 20px;
+      }
+
+      .club-detail-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .club-detail-actions .join-club-btn,
+      .club-detail-actions .membership-status {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .club-detail-actions form {
+        width: 100%;
+      }
+
+      .event-card {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("partials/navbar", { activePage: "clubs" }) %>
+
+  <main class="club-details container">
+
+    <a href="/clubs" class="back-link">
+      ← Back to All Clubs
+    </a>
+
+    <!-- Club Hero -->
+    <section class="club-detail-hero">
+
+      <div class="club-detail-icon">
+        <%= club.emoji || "🎓" %>
+      </div>
+
+      <p class="club-category-label">
+        <%= club.category || "Student Community" %>
+      </p>
+
+      <h1><%= club.name %></h1>
+
+      <p class="club-description">
+        <%= club.description || "Discover new opportunities, learn skills and connect with fellow students." %>
+      </p>
+
+      <!-- Membership and Members Buttons -->
+      <div class="club-detail-actions">
+
+        <% if (!currentUser) { %>
+
+          <a href="/login" class="join-club-btn">
+            Login to Request to Join ↗
+          </a>
+
+        <% } else if (currentUser.role === "student" && membershipStatus === "pending") { %>
+
+          <span class="membership-status">
+            ⏳ Request Pending
+          </span>
+
+        <% } else if (currentUser.role === "student" && membershipStatus === "approved") { %>
+
+          <span class="membership-status">
+            ✓ You are a Member
+          </span>
+
+        <% } else if (currentUser.role === "student") { %>
+
+          <form
+            action="/clubs/<%= encodeURIComponent(club.slug) %>/request"
+            method="POST"
+          >
+            <button type="submit" class="join-club-btn">
+              Request to Join ↗
+            </button>
+          </form>
+
+        <% } %>
+
+        <a
+          href="/clubs/<%= encodeURIComponent(club.slug) %>/members"
+          class="join-club-btn secondary-btn"
+        >
+          View Club Members →
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Activities -->
+    <section class="detail-section">
+      <h2>What We Do</h2>
+
+      <p class="section-description">
+        Explore activities, learn new skills, and collaborate with fellow students.
+      </p>
+
+      <% if (club.activities && club.activities.length > 0) { %>
+
+        <div class="activity-grid">
+          <% club.activities.forEach((activity) => { %>
+            <article class="activity-card">
+              <span class="activity-check">✓</span>
+              <p><%= activity %></p>
+            </article>
+          <% }) %>
+        </div>
+
+      <% } else { %>
+
+        <div class="empty-section">
+          Activities will be announced soon.
+        </div>
+
+      <% } %>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="detail-section">
+      <h2>Upcoming Events</h2>
+
+      <p class="section-description">
+        Stay updated with the latest events and activities from this club.
+      </p>
+
+      <% if (club.events && club.events.length > 0) { %>
+
+        <div class="events-list">
+          <% club.events.forEach((event) => { %>
+            <article class="event-card">
+
+              <div>
+                <h3><%= event.name %></h3>
+                <p>Stay tuned for event updates.</p>
+              </div>
+
+              <span class="event-date">
+                <%= event.date || "Coming Soon" %>
+              </span>
+
+            </article>
+          <% }) %>
+        </div>
+
+      <% } else { %>
+
+        <div class="empty-section">
+          New events will be announced soon.
+        </div>
+
+      <% } %>
+    </section>
+
+  </main>
+
+  <%- include("partials/footer") %>
+</body>
+</html>

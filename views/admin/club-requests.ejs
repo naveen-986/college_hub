@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Requests | Campus Hub</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .requests-page {
+            padding-top: 40px;
+            padding-bottom: 60px;
+            min-height: 65vh;
+        }
+
+        .requests-header {
+            margin-bottom: 28px;
+        }
+
+        .requests-header h1 {
+            margin-bottom: 8px;
+        }
+
+        .requests-header p {
+            color: var(--muted);
+        }
+
+        .request-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .request-card {
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--white);
+        }
+
+        .request-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .request-top h2 {
+            font-size: 19px;
+            margin: 0 0 6px;
+        }
+
+        .request-top p,
+        .request-details {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .request-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 12px;
+        }
+
+        .request-actions label {
+            display: grid;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .request-actions select {
+            min-width: 190px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--white);
+        }
+
+        .request-actions button {
+            border: 0;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .approve-btn {
+            background: #168653;
+            color: white;
+        }
+
+        .reject-btn {
+            background: #fff0f0;
+            color: #b42318;
+        }
+
+        .empty-requests {
+            padding: 35px;
+            text-align: center;
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+        }
+
+        .empty-requests p {
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+    <%- include("../partials/navbar") %>
+
+        <main class="requests-page container">
+            <div class="requests-header">
+                <span class="clubs-tag">ADMINISTRATION</span>
+                <h1>Club Join Requests</h1>
+                <p>Review student requests and assign their club roles.</p>
+            </div>
+
+            <% if (requests.length> 0) { %>
+                <div class="request-list">
+                    <% requests.forEach((request)=> { %>
+
+                        <% if (request.student && request.club) { %>
+                            <article class="request-card">
+                                <div class="request-top">
+                                    <div>
+                                        <h2>
+                                            <%= request.student.name %>
+                                        </h2>
+                                        <p>
+                                            <%= request.student.email %>
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            <%= request.club.name %>
+                                        </strong>
+                                        <p>
+                                            Status:
+                                            <%= request.status.charAt(0).toUpperCase() + request.status.slice(1) %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="request-details">
+                                    <div>
+                                        <strong>Branch:</strong>
+                                        <%= request.student.branch || "Not provided" %>
+                                    </div>
+
+                                    <div>
+                                        <strong>Year:</strong>
+                                        <%= request.student.year || "Not provided" %>
+                                    </div>
+
+                                    <div>
+                                        <strong>Phone:</strong>
+                                        <% if (request.student.showPhone && request.student.phone) { %>
+                                            <%= request.student.phone %>
+                                                <% } else { %>
+                                                    Not shared publicly
+                                                    <% } %>
+                                    </div>
+
+                                    <div>
+                                        <strong>Requested on:</strong>
+                                        <%= new Date(request.createdAt).toLocaleDateString("en-IN") %>
+                                    </div>
+                                </div>
+
+                                <% if (request.status==="pending" ) { %>
+                                    <div class="request-actions">
+                                        <form action="/admin/club-requests/<%= request._id %>/approve" method="POST"
+                                            class="request-actions">
+                                            <label>
+                                                Assign club role
+                                                <select name="clubRole" required>
+                                                    <option value="Member">Member</option>
+                                                    <option value="President">President</option>
+                                                    <option value="Vice President">Vice President</option>
+                                                    <option value="Secretary">Secretary</option>
+                                                    <option value="Joint Secretary">Joint Secretary</option>
+                                                    <option value="Coordinator">Coordinator</option>
+                                                </select>
+                                            </label>
+
+                                            <button type="submit" class="approve-btn">
+                                                Approve
+                                            </button>
+                                        </form>
+
+                                        <form action="/admin/club-requests/<%= request._id %>/reject" method="POST"
+                                            onsubmit="return confirm('Reject this club request?');">
+                                            <button type="submit" class="reject-btn">
+                                                Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <% } else { %>
+                                        <p>
+                                            <% if (request.status==="approved" ) { %>
+                                                Approved role: <strong>
+                                                    <%= request.clubRole %>
+                                                </strong>
+                                                <% } else { %>
+                                                    This request was rejected.
+                                                    <% } %>
+                                        </p>
+                                        <% } %>
+                            </article>
+                            <% } %>
+
+                                <% }) %>
+                </div>
+                <% } else { %>
+                    <div class="empty-requests">
+                        <h2>No join requests yet</h2>
+                        <p>Student requests will appear here when they apply to join a club.</p>
+                    </div>
+                    <% } %>
+        </main>
+
+        <%- include("../partials/footer") %>
+</body>
+
+</html>

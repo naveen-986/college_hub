@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Student Clubs | Campus Hub</title>
+  <meta
+    name="description"
+    content="Explore student clubs, discover activities, and find your community at Campus Hub."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/clubs.css">
+</head>
+
+<body>
+  <%- include("partials/navbar", { activePage: "clubs" }) %>
+
+  <main>
+    <section class="clubs-hero">
+      <div class="container clubs-intro">
+        <span class="clubs-tag">FIND YOUR COMMUNITY</span>
+
+        <h1>Discover your <span>group.</span></h1>
+
+        <p>
+          Explore student communities, learn new skills, work on projects,
+          and make your campus experience more meaningful.
+        </p>
+
+        <div class="clubs-search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            id="clubSearch"
+            placeholder="Search clubs by name or interest..."
+            aria-label="Search student clubs"
+          >
+        </div>
+
+        <p class="clubs-count">
+          Explore <strong id="clubCount"><%= clubs.length %></strong>
+          student clubs
+        </p>
+      </div>
+    </section>
+
+    <section class="clubs-section container">
+      <div class="clubs-heading">
+        <div>
+          <h2>Explore Clubs</h2>
+          <p>Find a community that matches your interests.</p>
+        </div>
+
+        <% if (currentUser && currentUser.role === "admin") { %>
+          <a href="/admin/clubs/new" class="add-club-btn">
+            <span>+</span> Add New Club
+          </a>
+        <% } %>
+      </div>
+
+      <% if (clubs.length > 0) { %>
+        <div class="clubs-grid" id="clubsGrid">
+
+          <% clubs.forEach((club) => { %>
+            <article class="club-card" data-name="<%= club.name %>">
+
+              <div class="club-card-top">
+                <div class="club-emoji">
+                  <%= club.emoji || "🎓" %>
+                </div>
+
+                <span class="club-category">
+                  <%= club.category %>
+                </span>
+              </div>
+
+              <div class="club-card-body">
+                <h3><%= club.name %></h3>
+                <p><%= club.description %></p>
+
+                <a
+                  href="/clubs/<%= encodeURIComponent(club.slug) %>"
+                  class="club-link"
+                >
+                  View Club <span aria-hidden="true">↗</span>
+                </a>
+
+                <% if (
+                  currentUser &&
+                  (
+                    currentUser.role === "admin" ||
+                    editableClubIds.includes(club._id.toString())
+                  )
+                ) { %>
+                  <a
+                    class="edit-club-btn"
+                    href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/edit"
+                  >
+                    Edit Club
+                  </a>
+                <% } %>
+
+                <% if (currentUser && currentUser.role === "admin") { %>
+                  <a
+                    class="edit-club-btn"
+                    href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/members"
+                  >
+                    Manage Members
+                  </a>
+
+                  <form
+                    action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/delete"
+                    method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this club?');"
+                  >
+                    <button type="submit" class="delete-club-btn">
+                      Delete
+                    </button>
+                  </form>
+                <% } %>
+
+              </div>
+            </article>
+          <% }) %>
+
+        </div>
+
+        <div class="no-clubs-message" id="noClubsMessage" hidden>
+          <h3>No matching clubs found</h3>
+          <p>Try another club name or search term.</p>
+        </div>
+
+      <% } else { %>
+        <div class="no-clubs-message">
+          <h3>No clubs available yet</h3>
+          <p>Student clubs will appear here when they are added.</p>
+        </div>
+      <% } %>
+    </section>
+
+    <section class="clubs-cta container">
+      <div>
+        <span class="clubs-tag">GET INVOLVED</span>
+        <h2>Your campus journey starts here.</h2>
+        <p>
+          Discover new interests, meet fellow students, and get involved
+          in campus life.
+        </p>
+      </div>
+
+      <a href="/login" class="register-btn">Get Started ↗</a>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
+
+  <script src="/js/script.js" defer></script>
+</body>
+</html>
