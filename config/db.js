@@ -3,9 +3,13 @@ const mongoose = require("mongoose");
 
 async function connectDB() {
   try {
-    await mongoose.connect(
-      "mongodb://127.0.0.1:27017/campus_hub"
-    );
+    const mongoURI = process.env.MONGODB_URI;
+
+    if (!mongoURI) {
+      throw new Error("MONGODB_URI is missing");
+    }
+
+    await mongoose.connect(mongoURI);
 
     console.log("MongoDB connected successfully");
   } catch (error) {
@@ -15,3 +19,4 @@ async function connectDB() {
 }
 
 module.exports = connectDB;
+
