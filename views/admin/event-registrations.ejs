@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Registrations | Campus Hub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/manage-events.css">
+</head>
+
+<body>
+
+  <%- include("../partials/navbar") %>
+
+    <main class="container events-page">
+
+      <a href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events">
+        ← Back to Manage Events
+      </a>
+
+      <h1>Event Registrations</h1>
+
+      <h2>
+        <%= event.name %>
+      </h2>
+
+      <p><strong>Club:</strong>
+        <%= club.name %>
+      </p>
+      <p><strong>Date:</strong>
+        <%= event.date %>
+      </p>
+
+      <h3>
+        Total Registrations:
+        <%= event.registrations.length %>
+      </h3>
+
+      <a href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/registrations/export"
+        class="export-csv-btn">
+        📥 Download CSV
+      </a>
+
+      <% if (event.registrations.length> 0) { %>
+
+        <div class="registrations-list">
+
+          <% event.registrations.forEach((student, index)=> { %>
+
+            <div class="event-card">
+
+              <h3>
+                <%= index + 1 %>. <%= student.name %>
+              </h3>
+
+              <p><strong>Email:</strong>
+                <%= student.email %>
+              </p>
+              <p><strong>Branch:</strong>
+                <%= student.branch || "Not specified" %>
+              </p>
+              <p><strong>Year:</strong>
+                <%= student.year || "Not specified" %>
+              </p>
+
+              <form method="POST"
+                action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/registrations/<%= student._id %>/cancel"
+                onsubmit="return confirm('Are you sure you want to cancel this student registration?')">
+                <button type="submit" class="cancel-registration-btn">
+                  Cancel Registration
+                </button>
+              </form>
+
+            </div>
+
+            <% }) %>
+
+        </div>
+
+        <% } else { %>
+
+          <div class="empty-section">
+            No students have registered for this event yet.
+          </div>
+
+          <% } %>
+
+    </main>
+
+    <%- include("../partials/footer") %>
+
+</body>
+
+</html>

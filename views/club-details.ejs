@@ -364,45 +364,66 @@
             </div>
 
             <% } %>
-      </section>
-
       <!-- Upcoming Events -->
-      <section class="detail-section">
-        <h2>Upcoming Events</h2>
+<section class="detail-section">
+  <h2>Upcoming Events</h2>
 
-        <p class="section-description">
-          Stay updated with the latest events and activities from this club.
-        </p>
+  <p class="section-description">
+    Stay updated with the latest events and activities from this club.
+  </p>
 
-        <% if (club.events && club.events.length> 0) { %>
+  <% if (club.events && club.events.length > 0) { %>
 
-          <div class="events-list">
-            <% club.events.forEach((event)=> { %>
-              <article class="event-card">
+    <div class="events-list">
+      <% club.events.forEach((event) => { %>
+        <article class="event-card">
 
-                <div>
-                  <h3>
-                    <%= event.name %>
-                  </h3>
-                  <p>Stay tuned for event updates.</p>
-                </div>
-
-                <span class="event-date">
-                  <%= event.date || "Coming Soon" %>
-                </span>
-
-              </article>
-              <% }) %>
+          <div>
+            <h3><%= event.name %></h3>
+            <p><%= event.description || "Stay tuned for event updates." %></p>
           </div>
 
-          <% } else { %>
+          <span class="event-date">
+            <%= event.date || "Coming Soon" %>
+          </span>
 
-            <div class="empty-section">
-              New events will be announced soon.
-            </div>
+          <% if (currentUser && currentUser.role === "student") { %>
 
+            <% const isRegistered = event.registrations &&
+              event.registrations.some(
+                userId => userId.toString() === currentUser.id.toString()
+              );
+            %>
+
+            <% if (isRegistered) { %>
+              <button type="button" disabled class="registered-btn">
+                ✓ Registered
+              </button>
+            <% } else { %>
+              <form
+                method="POST"
+                action="/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/register"
+              >
+                <button type="submit" class="register-btn">
+                  Register Now
+                </button>
+              </form>
             <% } %>
-      </section>
+
+          <% } %>
+
+        </article>
+      <% }) %>
+    </div>
+
+  <% } else { %>
+
+    <div class="empty-section">
+      New events will be announced soon.
+    </div>
+
+  <% } %>
+</section>
 
     </main>
 

@@ -89,6 +89,12 @@
                             href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/edit">
                             ✏️ Edit Event
                         </a>
+<!--                         
+                        view registered students -->
+                        <a class="view-registrations-btn"
+                            href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/registrations">
+                            👥 View Registrations
+                        </a>
 
                         <!-- Delete Event -->
                         <form method="POST" action="/admin/clubs/<%= club.slug %>/events/<%= event._id %>/delete"

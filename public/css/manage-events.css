@@ -234,4 +234,57 @@
   transform: translateY(-2px);
   color: #ffffff;
 }
+.view-registrations-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  margin: 10px 8px 10px 0;
+  background: #059669;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
 
+.view-registrations-btn:hover {
+  background: #047857;
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+.cancel-registration-btn {
+  padding: 9px 16px;
+  margin-top: 12px;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cancel-registration-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+.export-csv-btn {
+  display: inline-block;
+  padding: 11px 20px;
+  margin: 12px 0 20px;
+  background: #059669;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.export-csv-btn:hover {
+  background: #047857;
+  color: #ffffff;
+  transform: translateY(-2px);
+}

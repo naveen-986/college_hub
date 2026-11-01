@@ -980,6 +980,39 @@ app.get(
     }
   }
 );
+//event registration
+app.get(
+  "/admin/clubs/:slug/events/:eventId/registrations",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      // Get registered students' details
+      await club.populate(
+        "events.registrations",
+        "name email branch year"
+      );
+
+      const populatedEvent = club.events.id(req.params.eventId);
+
+      res.render("admin/event-registrations", {
+        club,
+        event: populatedEvent
+      });
+
+    } catch (error) {
+      console.error("View registrations error:", error);
+      res.status(500).send("Unable to load registrations.");
+    }
+  }
+);
 
 // ==============================
 // CLUB EVENT MANAGEMENT
@@ -1004,6 +1037,110 @@ app.get(
     } catch (error) {
       console.error("Edit event page error:", error);
       res.status(500).send("Unable to load edit event page.");
+    }
+  }
+);
+
+
+// Export Event Registrations as CSV
+app.get(
+  "/admin/clubs/:slug/events/:eventId/registrations/export",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      await club.populate(
+        "events.registrations",
+        "name email branch year"
+      );
+
+      const populatedEvent = club.events.id(req.params.eventId);
+
+      // CSV value escaping
+      const escapeCSV = (value) => {
+        const text = String(value ?? "");
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+
+      const rows = [
+        ["S.No.", "Student Name", "Email", "Branch", "Year"]
+      ];
+
+      populatedEvent.registrations.forEach((student, index) => {
+        if (!student) return;
+
+        rows.push([
+          index + 1,
+          student.name,
+          student.email,
+          student.branch,
+          student.year
+        ]);
+      });
+
+      const csvContent =
+        "\uFEFF" +
+        rows.map(row => row.map(escapeCSV).join(",")).join("\r\n");
+
+      const filename = `${club.slug}-event-registrations.csv`;
+
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`
+      );
+
+      res.send(csvContent);
+
+    } catch (error) {
+      console.error("CSV export error:", error);
+      res.status(500).send("Unable to export registrations.");
+    }
+  }
+);
+
+//to cancel event registration
+app.post(
+  "/admin/clubs/:slug/events/:eventId/registrations/:studentId/cancel",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      const studentId = req.params.studentId;
+
+      const isRegistered = event.registrations.some(
+        userId => userId.toString() === studentId
+      );
+
+      if (!isRegistered) {
+        return res.status(404).send("Student registration not found.");
+      }
+
+      event.registrations.pull(studentId);
+
+      await club.save();
+
+      res.redirect(
+        `/admin/clubs/${encodeURIComponent(club.slug)}/events/${event._id}/registrations`
+      );
+
+    } catch (error) {
+      console.error("Cancel registration error:", error);
+      res.status(500).send("Unable to cancel registration.");
     }
   }
 );
@@ -1160,6 +1297,85 @@ app.get(
     }
   }
 );
+
+
+// Event Registration
+app.post(
+  "/clubs/:slug/events/:eventId/register",
+  requireLogin,
+  async (req, res) => {
+    try {
+      const club = await Club.findOne({ slug: req.params.slug });
+
+      if (!club) {
+        return res.status(404).send("Club not found.");
+      }
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      // Only students can register
+      if (req.session.role !== "student") {
+        return res.send(`
+          <script>
+            alert("Only students can register for events.");
+            window.location.href = "/clubs/${encodeURIComponent(club.slug)}";
+          </script>
+        `);
+      }
+
+      // Check whether user is President or Coordinator
+      const clubLeadership = await ClubRequest.findOne({
+        student: req.session.userId,
+        club: club._id,
+        status: "approved",
+        clubRole: { $in: ["President", "Coordinator"] }
+      });
+
+      if (clubLeadership) {
+        return res.send(`
+          <script>
+            alert("President and Coordinator cannot register for their own club events.");
+            window.location.href = "/clubs/${encodeURIComponent(club.slug)}";
+          </script>
+        `);
+      }
+
+      // Prevent duplicate registration
+      const alreadyRegistered = (event.registrations || []).some(
+        userId => userId.toString() === req.session.userId.toString()
+      );
+
+      if (alreadyRegistered) {
+        return res.send(`
+          <script>
+            alert("You are already registered for this event.");
+            window.location.href = "/clubs/${encodeURIComponent(club.slug)}";
+          </script>
+        `);
+      }
+
+      event.registrations.push(req.session.userId);
+
+      await club.save();
+
+      res.send(`
+        <script>
+          alert("Registration successful!");
+          window.location.href = "/clubs/${encodeURIComponent(club.slug)}";
+        </script>
+      `);
+
+    } catch (error) {
+      console.error("Event registration error:", error);
+      res.status(500).send("Unable to register for event.");
+    }
+  }
+);
+
 
 // ==============================
 // UPDATE CLUB
