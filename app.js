@@ -102,14 +102,11 @@ function requireAdmin(req, res, next) {
 
 // Admin can edit every club.
 // Approved Presidents and Coordinators can edit only their own club.
+
 async function requireClubEditor(req, res, next) {
   try {
     if (!req.session || !req.session.userId) {
       return res.redirect("/login");
-    }
-
-    if (req.session.role === "admin") {
-      return next();
     }
 
     const club = await Club.findOne({
@@ -120,6 +117,13 @@ async function requireClubEditor(req, res, next) {
       return res.status(404).send("Club not found.");
     }
 
+    // Admin can manage every club.
+    if (req.session.role === "admin") {
+      req.clubToEdit = club;
+      return next();
+    }
+
+    // President/Coordinator can manage only their own club.
     const membership = await ClubRequest.findOne({
       student: req.session.userId,
       club: club._id,
@@ -131,23 +135,22 @@ async function requireClubEditor(req, res, next) {
 
     if (!membership) {
       return res.status(403).send(
-        "Access denied: Only this club's President or Coordinator can edit it."
+        "Access denied: Only this club's President or Coordinator can manage it."
       );
     }
 
     req.clubToEdit = club;
     next();
+
   } catch (error) {
-    console.error(
-      "Club editor permission check failed:",
-      error.message
-    );
+    console.error("Club editor permission error:", error);
 
     return res.status(500).send(
       "Unable to verify club editing permissions."
     );
   }
 }
+
 
 // ==============================
 // REGISTER
@@ -360,15 +363,11 @@ app.get("/clubs", async (req, res) => {
   }
 });
 
-// ==============================
-// CLUB MEMBERS
-// IMPORTANT: Keep this route BEFORE /clubs/:slug
-// Only Admin can view the members page.
-// ==============================
+/// Only registered students and admins can view club members.
 
 app.get(
   "/clubs/:slug/members",
-  
+  requireLogin,
   async (req, res) => {
     try {
       const club = await Club.findOne({
@@ -644,10 +643,9 @@ app.post(
 // INDIVIDUAL CLUB DETAILS
 // ==============================
 
+
 app.get("/clubs/:slug", async (req, res) => {
   try {
-    console.log("Requested club:", req.params.slug);
-
     const club = await Club.findOne({
       slug: req.params.slug
     });
@@ -657,31 +655,47 @@ app.get("/clubs/:slug", async (req, res) => {
     }
 
     let membershipRequest = null;
+    let canManageEvents = false;
 
-    if (
-      req.session.userId &&
-      req.session.role === "student"
-    ) {
-      membershipRequest = await ClubRequest.findOne({
-        student: req.session.userId,
-        club: club._id
-      });
+    if (req.session.userId) {
+
+      // Admin can manage every club.
+      if (req.session.role === "admin") {
+        canManageEvents = true;
+      } else {
+        membershipRequest = await ClubRequest.findOne({
+          student: req.session.userId,
+          club: club._id
+        });
+
+        // Only this club's approved President/Coordinator.
+        const editorMembership = await ClubRequest.findOne({
+          student: req.session.userId,
+          club: club._id,
+          status: "approved",
+          clubRole: {
+            $in: ["President", "Coordinator"]
+          }
+        });
+
+        canManageEvents = !!editorMembership;
+      }
     }
 
     res.render("club-details", {
       club,
       membershipStatus: membershipRequest
         ? membershipRequest.status
-        : null
+        : null,
+      canManageEvents
     });
+
   } catch (error) {
     console.error("Club details error:", error);
-
-    res.status(500).send(
-      "Failed to load club details. Check terminal."
-    );
+    res.status(500).send("Failed to load club details.");
   }
 });
+
 
 // ==============================
 // STUDENT: REQUEST TO JOIN A CLUB
@@ -947,6 +961,152 @@ app.post(
     }
   }
 );
+
+// MANAGE CLUB EVENTS PAGE
+app.get(
+  "/admin/clubs/:slug/events",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+
+      res.render("admin/manage-events", {
+        club
+      });
+
+    } catch (error) {
+      console.error("Manage events page error:", error);
+      res.status(500).send("Unable to load events page.");
+    }
+  }
+);
+
+// ==============================
+// CLUB EVENT MANAGEMENT
+// Admin: All clubs
+// President/Coordinator: Own club
+// ==============================
+
+// CREATE EVENT
+app.post(
+  "/admin/clubs/:slug/events",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const { name, description, date, venue } = req.body;
+      const club = req.clubToEdit;
+
+      if (!name?.trim() || !date?.trim()) {
+        return res.status(400).send(
+          "Event name and date are required."
+        );
+      }
+
+      if (
+        name.trim().length > 150 ||
+        description?.length > 2000 ||
+        venue?.length > 200
+      ) {
+        return res.status(400).send(
+          "Event details exceed the allowed length."
+        );
+      }
+
+      club.events.push({
+        name: name.trim(),
+        description: description?.trim() || "",
+        date: date.trim(),
+        venue: venue?.trim() || ""
+      });
+
+      await club.save();
+
+      res.redirect(
+        `/clubs/${encodeURIComponent(club.slug)}`
+      );
+    } catch (error) {
+      console.error("Create event error:", error);
+      res.status(500).send("Unable to create event.");
+    }
+  }
+);
+
+// UPDATE EVENT
+app.post(
+  "/admin/clubs/:slug/events/:eventId/edit",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const { name, description, date, venue } = req.body;
+      const club = req.clubToEdit;
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      if (!name?.trim() || !date?.trim()) {
+        return res.status(400).send(
+          "Event name and date are required."
+        );
+      }
+
+      if (
+        name.trim().length > 150 ||
+        description?.length > 2000 ||
+        venue?.length > 200
+      ) {
+        return res.status(400).send(
+          "Event details exceed the allowed length."
+        );
+      }
+
+      event.name = name.trim();
+      event.description = description?.trim() || "";
+      event.date = date.trim();
+      event.venue = venue?.trim() || "";
+
+      await club.save();
+
+      res.redirect(
+        `/clubs/${encodeURIComponent(club.slug)}`
+      );
+    } catch (error) {
+      console.error("Update event error:", error);
+      res.status(500).send("Unable to update event.");
+    }
+  }
+);
+
+// DELETE EVENT
+app.post(
+  "/admin/clubs/:slug/events/:eventId/delete",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      event.deleteOne();
+
+      await club.save();
+
+      res.redirect(
+        `/clubs/${encodeURIComponent(club.slug)}`
+      );
+    } catch (error) {
+      console.error("Delete event error:", error);
+      res.status(500).send("Unable to delete event.");
+    }
+  }
+);
+
 
 // ==============================
 // EDIT CLUB PAGE

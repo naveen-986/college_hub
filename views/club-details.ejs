@@ -1,15 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title><%= club.name %> | Campus Hub</title>
-  <meta
-    name="description"
-    content="Discover the activities, events and members of the <%= club.name %> at Campus Hub."
-  >
+  <title>
+    <%= club.name %> | Campus Hub
+  </title>
+  <meta name="description" content="Discover the activities, events and members of the <%= club.name %> at Campus Hub.">
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/club-details.css">
@@ -263,139 +262,151 @@
 <body>
   <%- include("partials/navbar", { activePage: "clubs" }) %>
 
-  <main class="club-details container">
+    <main class="club-details container">
 
-    <a href="/clubs" class="back-link">
-      ← Back to All Clubs
-    </a>
+      <a href="/clubs" class="back-link">
+        ← Back to All Clubs
+      </a>
 
-    <!-- Club Hero -->
-    <section class="club-detail-hero">
+      <!-- Club Hero -->
+      <section class="club-detail-hero">
 
-      <div class="club-detail-icon">
-        <%= club.emoji || "🎓" %>
-      </div>
-
-      <p class="club-category-label">
-        <%= club.category || "Student Community" %>
-      </p>
-
-      <h1><%= club.name %></h1>
-
-      <p class="club-description">
-        <%= club.description || "Discover new opportunities, learn skills and connect with fellow students." %>
-      </p>
-
-      <!-- Membership and Members Buttons -->
-      <div class="club-detail-actions">
-
-        <% if (!currentUser) { %>
-
-          <a href="/login" class="join-club-btn">
-            Login to Request to Join ↗
-          </a>
-
-        <% } else if (currentUser.role === "student" && membershipStatus === "pending") { %>
-
-          <span class="membership-status">
-            ⏳ Request Pending
-          </span>
-
-        <% } else if (currentUser.role === "student" && membershipStatus === "approved") { %>
-
-          <span class="membership-status">
-            ✓ You are a Member
-          </span>
-
-        <% } else if (currentUser.role === "student") { %>
-
-          <form
-            action="/clubs/<%= encodeURIComponent(club.slug) %>/request"
-            method="POST"
-          >
-            <button type="submit" class="join-club-btn">
-              Request to Join ↗
-            </button>
-          </form>
-
-        <% } %>
-
-        <a
-          href="/clubs/<%= encodeURIComponent(club.slug) %>/members"
-          class="join-club-btn secondary-btn"
-        >
-          View Club Members →
-        </a>
-
-      </div>
-    </section>
-
-    <!-- Activities -->
-    <section class="detail-section">
-      <h2>What We Do</h2>
-
-      <p class="section-description">
-        Explore activities, learn new skills, and collaborate with fellow students.
-      </p>
-
-      <% if (club.activities && club.activities.length > 0) { %>
-
-        <div class="activity-grid">
-          <% club.activities.forEach((activity) => { %>
-            <article class="activity-card">
-              <span class="activity-check">✓</span>
-              <p><%= activity %></p>
-            </article>
-          <% }) %>
+        <div class="club-detail-icon">
+          <%= club.emoji || "🎓" %>
         </div>
 
-      <% } else { %>
+        <p class="club-category-label">
+          <%= club.category || "Student Community" %>
+        </p>
 
-        <div class="empty-section">
-          Activities will be announced soon.
-        </div>
+        <h1>
+          <%= club.name %>
+        </h1>
 
-      <% } %>
-    </section>
+        <p class="club-description">
+          <%= club.description || "Discover new opportunities, learn skills and connect with fellow students." %>
+        </p>
 
-    <!-- Upcoming Events -->
-    <section class="detail-section">
-      <h2>Upcoming Events</h2>
+        <!-- Membership and Members Buttons -->
+        <div class="club-detail-actions">
 
-      <p class="section-description">
-        Stay updated with the latest events and activities from this club.
-      </p>
+          <% if (!currentUser) { %>
 
-      <% if (club.events && club.events.length > 0) { %>
+            <a href="/login" class="join-club-btn">
+              Login to Request to Join ↗
+            </a>
 
-        <div class="events-list">
-          <% club.events.forEach((event) => { %>
-            <article class="event-card">
+            <% } else if (currentUser.role==="student" && membershipStatus==="pending" ) { %>
 
-              <div>
-                <h3><%= event.name %></h3>
-                <p>Stay tuned for event updates.</p>
-              </div>
-
-              <span class="event-date">
-                <%= event.date || "Coming Soon" %>
+              <span class="membership-status">
+                ⏳ Request Pending
               </span>
 
-            </article>
-          <% }) %>
+              <% } else if (currentUser.role==="student" && membershipStatus==="approved" ) { %>
+
+                <span class="membership-status">
+                  ✓ You are a Member
+                </span>
+
+                <% } else if (currentUser.role==="student" ) { %>
+
+                  <form action="/clubs/<%= encodeURIComponent(club.slug) %>/request" method="POST">
+                    <button type="submit" class="join-club-btn">
+                      Request to Join ↗
+                    </button>
+                  </form>
+
+                  <% } %>
+
+                    <a href="/clubs/<%= encodeURIComponent(club.slug) %>/members" class="join-club-btn secondary-btn">
+                      View Club Members →
+                    </a>
+
+                    <% if (canManageEvents) { %>
+
+                      <a href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events"
+                        class="join-club-btn secondary-btn">
+                        ⚙ Manage Events
+                      </a>
+
+                      <% } %>
+
         </div>
+      </section>
 
-      <% } else { %>
 
-        <div class="empty-section">
-          New events will be announced soon.
-        </div>
 
-      <% } %>
-    </section>
+      <!-- Activities -->
+      <section class="detail-section">
+        <h2>What We Do</h2>
 
-  </main>
+        <p class="section-description">
+          Explore activities, learn new skills, and collaborate with fellow students.
+        </p>
 
-  <%- include("partials/footer") %>
+        <% if (club.activities && club.activities.length> 0) { %>
+
+          <div class="activity-grid">
+            <% club.activities.forEach((activity)=> { %>
+              <article class="activity-card">
+                <span class="activity-check">✓</span>
+                <p>
+                  <%= activity %>
+                </p>
+              </article>
+              <% }) %>
+          </div>
+
+          <% } else { %>
+
+            <div class="empty-section">
+              Activities will be announced soon.
+            </div>
+
+            <% } %>
+      </section>
+
+      <!-- Upcoming Events -->
+      <section class="detail-section">
+        <h2>Upcoming Events</h2>
+
+        <p class="section-description">
+          Stay updated with the latest events and activities from this club.
+        </p>
+
+        <% if (club.events && club.events.length> 0) { %>
+
+          <div class="events-list">
+            <% club.events.forEach((event)=> { %>
+              <article class="event-card">
+
+                <div>
+                  <h3>
+                    <%= event.name %>
+                  </h3>
+                  <p>Stay tuned for event updates.</p>
+                </div>
+
+                <span class="event-date">
+                  <%= event.date || "Coming Soon" %>
+                </span>
+
+              </article>
+              <% }) %>
+          </div>
+
+          <% } else { %>
+
+            <div class="empty-section">
+              New events will be announced soon.
+            </div>
+
+            <% } %>
+      </section>
+
+    </main>
+
+    <%- include("partials/footer") %>
 </body>
+
 </html>

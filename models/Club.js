@@ -53,18 +53,42 @@ const clubSchema = new mongoose.Schema(
       type: [String],
       default: []
     },
-    events: [
+  events: [
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 150
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 2000,
+      default: ""
+    },
+    date: {
+      type: String,
+      required: true
+    },
+    venue: {
+      type: String,
+      trim: true,
+      maxlength: 200,
+      default: ""
+    },
+    registrations: [
       {
-        name: {
-          type: String,
-          required: true
-        },
-        date: {
-          type: String,
-          default: "Coming Soon"
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
       }
     ],
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }
+],
     updates: {
       type: [clubUpdateSchema],
       default: []
