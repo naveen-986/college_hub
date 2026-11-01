@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Event | Campus Hub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/manage-events.css">
+</head>
+<body>
+
+  <%- include("../partials/navbar") %>
+
+  <main class="container events-page">
+
+    <a href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events">
+      ← Back to Manage Events
+    </a>
+
+    <h1>Edit Event</h1>
+
+    <p>
+      Update event details for
+      <strong><%= club.name %></strong>
+    </p>
+
+    <form
+      class="create-event-form"
+      method="POST"
+      action="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/edit"
+    >
+
+      <label>Event Name</label>
+      <input
+        type="text"
+        name="name"
+        value="<%= event.name %>"
+        maxlength="150"
+        required
+      >
+
+      <label>Description</label>
+      <textarea
+        name="description"
+        maxlength="2000"
+      ><%= event.description || "" %></textarea>
+
+      <label>Event Date</label>
+      <input
+        type="date"
+        name="date"
+        value="<%= event.date %>"
+        required
+      >
+
+      <label>Venue</label>
+      <input
+        type="text"
+        name="venue"
+        value="<%= event.venue || "" %>"
+        maxlength="200"
+      >
+
+      <button type="submit">Save Changes</button>
+
+    </form>
+
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -987,6 +987,26 @@ app.get(
 // President/Coordinator: Own club
 // ==============================
 
+
+app.get(
+  "/admin/clubs/:slug/events/:eventId/edit",
+  requireClubEditor,
+  async (req, res) => {
+    try {
+      const club = req.clubToEdit;
+      const event = club.events.id(req.params.eventId);
+
+      if (!event) {
+        return res.status(404).send("Event not found.");
+      }
+
+      res.render("admin/edit-event", { club, event });
+    } catch (error) {
+      console.error("Edit event page error:", error);
+      res.status(500).send("Unable to load edit event page.");
+    }
+  }
+);
 // CREATE EVENT
 app.post(
   "/admin/clubs/:slug/events",

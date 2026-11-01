@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,125 +15,105 @@
 
     <%- include("../partials/navbar") %>
 
-    <main class="container events-page">
+        <main class="container events-page">
 
-        <!-- Back Navigation -->
-        <a href="/clubs/<%= club.slug %>">
-            ← Back to Club
-        </a>
+            <!-- Back Navigation -->
+            <a href="/clubs/<%= club.slug %>">
+                ← Back to Club
+            </a>
 
-        <!-- Page Heading -->
-        <h1>Event Management</h1>
+            <!-- Page Heading -->
+            <h1>Event Management</h1>
 
-        <p>
-            Manage events for
-            <strong><%= club.name %></strong>
-        </p>
+            <p>
+                Manage events for
+                <strong>
+                    <%= club.name %>
+                </strong>
+            </p>
 
-        <!-- Create Event Form -->
-        <h2>Create New Event</h2>
+            <!-- Create Event Form -->
+            <h2>Create New Event</h2>
 
-        <form
-            class="create-event-form"
-            method="POST"
-            action="/admin/clubs/<%= club.slug %>/events"
-        >
+            <form class="create-event-form" method="POST" action="/admin/clubs/<%= club.slug %>/events">
 
-            <input
-                type="text"
-                name="name"
-                placeholder="Enter event name"
-                maxlength="150"
-                required
-            >
+                <input type="text" name="name" placeholder="Enter event name" maxlength="150" required>
 
-            <textarea
-                name="description"
-                placeholder="Describe your event..."
-                maxlength="2000"
-            ></textarea>
+                <textarea name="description" placeholder="Describe your event..." maxlength="2000"></textarea>
 
-            <input
-                type="date"
-                name="date"
-                required
-            >
+                <input type="date" name="date" required>
 
-            <input
-                type="text"
-                name="venue"
-                placeholder="Enter event venue"
-                maxlength="200"
-            >
+                <input type="text" name="venue" placeholder="Enter event venue" maxlength="200">
 
-            <button type="submit">
-                + Create Event
-            </button>
+                <button type="submit">
+                    + Create Event
+                </button>
 
-        </form>
+            </form>
 
-        <hr>
+            <hr>
 
-        <!-- Existing Events -->
-        <h2>Existing Events</h2>
+            <!-- Existing Events -->
+            <h2>Existing Events</h2>
 
-        <% if (club.events && club.events.length > 0) { %>
+            <% if (club.events && club.events.length> 0) { %>
 
-            <% club.events.forEach(event => { %>
+                <% club.events.forEach(event=> { %>
 
-                <div class="event-card">
+                    <div class="event-card">
 
-                    <h3>
-                        <%= event.name %>
-                    </h3>
+                        <h3>
+                            <%= event.name %>
+                        </h3>
 
-                    <p>
-                        <%= event.description || "No description available." %>
-                    </p>
+                        <p>
+                            <%= event.description || "No description available." %>
+                        </p>
 
-                    <p>
-                        <strong>Date:</strong>
-                        <%= event.date %>
-                    </p>
+                        <p>
+                            <strong>Date:</strong>
+                            <%= event.date %>
+                        </p>
 
-                    <p>
-                        <strong>Venue:</strong>
-                        <%= event.venue || "Not specified" %>
-                    </p>
+                        <p>
+                            <strong>Venue:</strong>
+                            <%= event.venue || "Not specified" %>
+                        </p>
 
-                    <p>
-                        <strong>Registrations:</strong>
-                        <%= event.registrations
-                            ? event.registrations.length
-                            : 0 %>
-                    </p>
+                        <p>
+                            <strong>Registrations:</strong>
+                            <%= event.registrations ? event.registrations.length : 0 %>
+                        </p>
+                        <!-- edit event -->
+                        <a class="edit-event-btn"
+                            href="/admin/clubs/<%= encodeURIComponent(club.slug) %>/events/<%= event._id %>/edit">
+                            ✏️ Edit Event
+                        </a>
 
-                    <!-- Delete Event -->
-                    <form
-                        method="POST"
-                        action="/admin/clubs/<%= club.slug %>/events/<%= event._id %>/delete"
-                        onsubmit="return confirm('Are you sure you want to delete this event?')"
-                    >
+                        <!-- Delete Event -->
+                        <form method="POST" action="/admin/clubs/<%= club.slug %>/events/<%= event._id %>/delete"
+                            onsubmit="return confirm('Are you sure you want to delete this event?')">
 
-                        <button type="submit">
-                            Delete Event
-                        </button>
+                            <button type="submit">
+                                Delete Event
+                            </button>
 
-                    </form>
+                        </form>
 
-                </div>
+                    </div>
 
-            <% }); %>
+                    <% }); %>
 
-        <% } else { %>
+                        <% } else { %>
 
-            <p>No events created yet.</p>
+                            <p>No events created yet.</p>
 
-        <% } %>
+                            <% } %>
 
-    </main>
+        </main>
 
-    <%- include("../partials/footer") %>
+        <%- include("../partials/footer") %>
 
 </body>
+
 </html>
