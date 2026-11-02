@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notice Board | CampusHub</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Notice Board CSS -->
+    <link rel="stylesheet" href="/css/notices.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include("partials/navbar") %>
+
+    <main class="notices-container">
+
+        <!-- Notice Board Header -->
+        <div class="notices-header">
+
+            <div>
+                <h1>Notice Board</h1>
+                <p>Stay updated with the latest campus announcements.</p>
+            </div>
+
+            <% if (currentUser && (
+                currentUser.role === "admin" ||
+                currentUser.displayRole === "President" ||
+                currentUser.displayRole === "Coordinator"
+            )) { %>
+
+                <a href="/notices/new" class="create-notice-btn">
+                    + Create Notice
+                </a>
+
+            <% } %>
+
+        </div>
+
+        <!-- Check Notices -->
+        <% if (notices.length === 0) { %>
+
+            <div class="empty-notices">
+                <h2>No Notices Yet</h2>
+                <p>There are currently no announcements available.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="notices-grid">
+
+                <% notices.forEach(notice => { %>
+
+                    <article class="notice-card">
+
+                        <!-- Category and Date -->
+                        <div class="notice-card-top">
+
+                            <span class="notice-category">
+                                <%= notice.category %>
+                            </span>
+
+                            <span class="notice-date">
+                                <%= new Date(notice.createdAt).toLocaleDateString("en-IN") %>
+                            </span>
+
+                        </div>
+
+                        <!-- Notice Details -->
+                        <h2>
+                            <%= notice.title %>
+                        </h2>
+
+                        <p class="notice-description"><%= notice.description %></p>
+
+                        <!-- Notice Footer -->
+                        <div class="notice-footer">
+
+                            <span>
+                                <strong>Club:</strong>
+                                <%= notice.club ? notice.club.name : "General Notice" %>
+                            </span>
+
+                            <span>
+                                <strong>By:</strong>
+                                <%= notice.createdBy ? notice.createdBy.name : "Admin" %>
+                            </span>
+
+                        </div>
+
+                        <!-- Edit and Delete Buttons -->
+                        <%
+                            const canEditNotice = currentUser && (
+                                currentUser.role === "admin" ||
+                                (
+                                    notice.club &&
+                                    ["President", "Coordinator"].includes(currentUser.displayRole)
+                                )
+                            );
+                        %>
+
+                        <% if (canEditNotice) { %>
+
+                            <div class="notice-actions">
+
+                                <a
+                                    href="/notices/<%= notice._id %>/edit"
+                                    class="edit-notice-btn">
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="/notices/<%= notice._id %>/delete"
+                                    method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this notice?')">
+
+                                    <button type="submit" class="delete-notice-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        <% } %>
+
+                    </article>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </main>
+
+    <!-- Footer -->
+    <%- include("partials/footer") %>
+
+</body>
+</html>

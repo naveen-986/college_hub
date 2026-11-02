@@ -1,0 +1,140 @@
+
+.notices-container {
+  max-width: 1150px;
+  margin: 45px auto;
+  padding: 0 20px;
+}
+
+.notices-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.notices-header h1 {
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.notices-header p {
+  color: #64748b;
+}
+
+.create-notice-btn {
+  background: #2563eb;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.notices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+.notice-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.notice-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.notice-category {
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.notice-date {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.notice-card h2 {
+  color: #1e293b;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.notice-description {
+  color: #475569;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.notice-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 20px;
+  padding-top: 15px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.empty-notices {
+  text-align: center;
+  padding: 65px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+}
+
+@media (max-width: 600px) {
+  .notices-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.notice-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.notice-actions form {
+  margin: 0;
+}
+
+.edit-notice-btn,
+.delete-notice-btn {
+  padding: 9px 16px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.edit-notice-btn {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: none;
+}
+
+.delete-notice-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+}

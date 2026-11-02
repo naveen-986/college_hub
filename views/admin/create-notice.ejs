@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Create Notice | CampusHub</title>
+
+  <!-- Common CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Create Notice Page CSS -->
+  <link rel="stylesheet" href="/css/create-notice.css">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <%- include("../partials/navbar") %>
+
+  <main class="notice-form-container">
+
+    <h1>Create Notice</h1>
+    <p>Share an important announcement with students.</p>
+
+    <form action="/notices" method="POST">
+
+      <div class="form-group">
+        <label for="title">Notice Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          maxlength="150"
+          placeholder="Enter notice title"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="6"
+          maxlength="3000"
+          placeholder="Write notice details..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select Category</option>
+          <option value="Academic">Academic</option>
+          <option value="Examination">Examination</option>
+          <option value="Events">Events</option>
+          <option value="Placement">Placement</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="clubId">Select Club</label>
+
+        <select
+          id="clubId"
+          name="clubId"
+          <%= isAdmin ? "" : "required" %>
+        >
+
+          <% if (isAdmin) { %>
+            <option value="">General Notice (All Students)</option>
+          <% } else { %>
+            <option value="">Select Your Club</option>
+          <% } %>
+
+          <% clubs.forEach(club => { %>
+            <option value="<%= club._id %>">
+              <%= club.name %>
+            </option>
+          <% }) %>
+
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Publish Notice</button>
+        <a href="/notices" class="cancel-btn">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+
+  <!-- Footer -->
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

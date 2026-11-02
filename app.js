@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const connectDB = require("./config/db");
 require("dotenv").config();
+const Notice = require("./models/Notice");
 
 const Club = require("./models/Club");
 const session = require("express-session");
@@ -151,6 +152,246 @@ async function requireClubEditor(req, res, next) {
   }
 }
 
+async function canManageNotice(userId, role, notice) {
+  // Admin can manage every notice
+  if (role === "admin") {
+    return true;
+  }
+
+  // Students cannot manage general notices
+  if (!notice.club) {
+    return false;
+  }
+
+  // President/Coordinator can manage notices of their own club
+  const membership = await ClubRequest.findOne({
+    student: userId,
+    club: notice.club,
+    status: "approved",
+    clubRole: { $in: ["President", "Coordinator"] }
+  });
+
+  return !!membership;
+}
+
+// Public Notice Board
+app.get("/notices", async (req, res) => {
+  try {
+    const notices = await Notice.find()
+      .populate("club", "name slug")
+      .populate("createdBy", "name")
+      .sort({ createdAt: -1 });
+
+    res.render("notices", { notices });
+
+  } catch (error) {
+    console.error("Notice loading error:", error);
+    res.status(500).send("Unable to load notices.");
+  }
+});
+
+// Show Create Notice Form
+app.get("/notices/new", requireLogin, async (req, res) => {
+  try {
+    let clubs = [];
+    const isAdmin = req.session.role === "admin";
+
+    if (isAdmin) {
+      // Admin can create notices for any club or general notices
+      clubs = await Club.find().sort({ name: 1 });
+    } else {
+      // President/Coordinator can create notices only for their own clubs
+      const memberships = await ClubRequest.find({
+        student: req.session.userId,
+        status: "approved",
+        clubRole: { $in: ["President", "Coordinator"] }
+      }).populate("club");
+
+      clubs = memberships
+        .filter(membership => membership.club)
+        .map(membership => membership.club);
+
+      if (clubs.length === 0) {
+        return res.status(403).send("You are not authorized to create notices.");
+      }
+    }
+
+    res.render("admin/create-notice", {
+      clubs,
+      isAdmin
+    });
+
+  } catch (error) {
+    console.error("Create notice page error:", error);
+    res.status(500).send("Unable to open create notice page.");
+  }
+});
+
+// Create New Notice
+app.post("/notices", requireLogin, async (req, res) => {
+  try {
+    const { title, description, category, clubId } = req.body;
+    const isAdmin = req.session.role === "admin";
+
+    let selectedClub = null;
+
+    if (isAdmin) {
+      // Admin can create general notices or club-specific notices
+      if (clubId) {
+        selectedClub = await Club.findById(clubId);
+
+        if (!selectedClub) {
+          return res.status(404).send("Selected club not found.");
+        }
+      }
+    } else {
+      // President/Coordinator must select a club they manage
+      if (!clubId) {
+        return res.status(403).send("You can only create notices for your own club.");
+      }
+
+      const membership = await ClubRequest.findOne({
+        student: req.session.userId,
+        club: clubId,
+        status: "approved",
+        clubRole: { $in: ["President", "Coordinator"] }
+      });
+
+      if (!membership) {
+        return res.status(403).send("You are not authorized to create a notice for this club.");
+      }
+
+      selectedClub = await Club.findById(clubId);
+
+      if (!selectedClub) {
+        return res.status(404).send("Club not found.");
+      }
+    }
+
+    await Notice.create({
+      title,
+      description,
+      category,
+      club: selectedClub ? selectedClub._id : null,
+      createdBy: req.session.userId
+    });
+
+    res.redirect("/notices");
+
+  } catch (error) {
+    console.error("Notice creation error:", error);
+    res.status(500).send("Unable to create notice.");
+  }
+});
+
+// Show Edit Notice Page
+app.get("/notices/:noticeId/edit", requireLogin, async (req, res) => {
+  try {
+    const notice = await Notice.findById(req.params.noticeId);
+
+    if (!notice) {
+      return res.status(404).send("Notice not found.");
+    }
+
+    const allowed = await canManageNotice(
+      req.session.userId,
+      req.session.role,
+      notice
+    );
+
+    if (!allowed) {
+      return res.status(403).send("Access denied.");
+    }
+
+    res.render("admin/edit-notice", { notice });
+
+  } catch (error) {
+    console.error("Edit notice error:", error);
+    res.status(500).send("Unable to open edit page.");
+  }
+});
+
+
+// Update Notice
+app.post("/notices/:noticeId/edit", requireLogin, async (req, res) => {
+  try {
+    const notice = await Notice.findById(req.params.noticeId);
+
+    if (!notice) {
+      return res.status(404).send("Notice not found.");
+    }
+
+    const allowed = await canManageNotice(
+      req.session.userId,
+      req.session.role,
+      notice
+    );
+
+    if (!allowed) {
+      return res.status(403).send("Access denied.");
+    }
+
+    const { title, description, category } = req.body;
+
+    const validCategories = [
+      "Academic",
+      "Examination",
+      "Events",
+      "Placement",
+      "General"
+    ];
+
+    if (
+      !title?.trim() ||
+      !description?.trim() ||
+      !validCategories.includes(category)
+    ) {
+      return res.status(400).send("Please provide valid notice details.");
+    }
+
+    notice.title = title.trim();
+    notice.description = description.trim();
+    notice.category = category;
+
+    await notice.save();
+
+    res.redirect("/notices");
+
+  } catch (error) {
+    console.error("Notice update error:", error);
+    res.status(500).send("Unable to update notice.");
+  }
+});
+
+
+// Delete Notice
+app.post("/notices/:noticeId/delete", requireLogin, async (req, res) => {
+  try {
+    const notice = await Notice.findById(req.params.noticeId);
+
+    if (!notice) {
+      return res.status(404).send("Notice not found.");
+    }
+
+    const allowed = await canManageNotice(
+      req.session.userId,
+      req.session.role,
+      notice
+    );
+
+    if (!allowed) {
+      return res.status(403).send("Access denied.");
+    }
+
+    await Notice.findByIdAndDelete(notice._id);
+
+    res.redirect("/notices");
+
+  } catch (error) {
+    console.error("Notice deletion error:", error);
+    res.status(500).send("Unable to delete notice.");
+  }
+});
 
 // ==============================
 // REGISTER
