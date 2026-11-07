@@ -9,6 +9,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const User = require("./models/User");
 const ClubRequest = require("./models/ClubRequest");
+const LostFound = require("./models/LostFound");
 
 const app = express();
 const PORT = 3000;
@@ -174,21 +175,63 @@ async function canManageNotice(userId, role, notice) {
   return !!membership;
 }
 
-// Public Notice Board
+
+// Public Notice Board - Search, Filter & Sorting
 app.get("/notices", async (req, res) => {
   try {
-    const notices = await Notice.find()
+    const { search, category, sort } = req.query;
+
+    // Build filter query
+    const filter = {};
+
+    // Search by title or description
+    if (search && search.trim()) {
+      const safeSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      filter.$or = [
+        { title: { $regex: safeSearch, $options: "i" } },
+        { description: { $regex: safeSearch, $options: "i" } }
+      ];
+    }
+
+    // Filter by category
+    const allowedCategories = [
+      "Academic",
+      "Examination",
+      "Events",
+      "Placement",
+      "General"
+    ];
+
+    if (allowedCategories.includes(category)) {
+      filter.category = category;
+    }
+
+    // Sorting
+    let sortOption = { createdAt: -1 };
+
+    if (sort === "oldest") {
+      sortOption = { createdAt: 1 };
+    }
+
+    const notices = await Notice.find(filter)
       .populate("club", "name slug")
       .populate("createdBy", "name")
-      .sort({ createdAt: -1 });
+      .sort(sortOption);
 
-    res.render("notices", { notices });
+    res.render("notices", {
+      notices,
+      search: search || "",
+      selectedCategory: category || "",
+      selectedSort: sort || "latest"
+    });
 
   } catch (error) {
     console.error("Notice loading error:", error);
     res.status(500).send("Unable to load notices.");
   }
 });
+
 
 // Show Create Notice Form
 app.get("/notices/new", requireLogin, async (req, res) => {
@@ -392,6 +435,95 @@ app.post("/notices/:noticeId/delete", requireLogin, async (req, res) => {
     res.status(500).send("Unable to delete notice.");
   }
 });
+
+
+// Show Lost & Found Report Form
+app.get("/lost-found/new", requireLogin, (req, res) => {
+  res.render("lost-found", {
+    error: null
+  });
+});
+
+
+// Public Lost & Found Listing
+app.get("/lost-found", async (req, res) => {
+  try {
+    const items = await LostFound.find({
+      status: "Approved"
+    })
+      .populate("postedBy", "name")
+      .sort({ createdAt: -1 });
+
+    res.render("lost-found-list", {
+      items
+    });
+
+  } catch (error) {
+    console.error("Lost & Found loading error:", error);
+    res.status(500).send("Unable to load Lost & Found items.");
+  }
+});
+
+
+// Submit Lost & Found Report
+app.post("/lost-found", requireLogin, async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      type,
+      category,
+      location,
+      date,
+      contact
+    } = req.body;
+
+    const allowedTypes = ["Lost", "Found"];
+
+    const allowedCategories = [
+      "Electronics",
+      "Documents",
+      "Clothing",
+      "Accessories",
+      "Books",
+      "Others"
+    ];
+
+    // Validate input
+    if (
+      !title?.trim() ||
+      !description?.trim() ||
+      !location?.trim() ||
+      !contact?.trim() ||
+      !date ||
+      !allowedTypes.includes(type) ||
+      !allowedCategories.includes(category) ||
+      Number.isNaN(Date.parse(date))
+    ) {
+      return res.status(400).send("Please provide valid report details.");
+    }
+
+    // Create report with Pending status
+    await LostFound.create({
+      title,
+      description,
+      type,
+      category,
+      location,
+      date,
+      contact,
+      postedBy: req.session.userId,
+      status: "Pending"
+    });
+
+    res.redirect("/lost-found?submitted=1");
+
+  } catch (error) {
+    console.error("Lost & Found submission error:", error);
+    res.status(500).send("Unable to submit report.");
+  }
+});
+
 
 // ==============================
 // REGISTER

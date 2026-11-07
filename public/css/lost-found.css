@@ -1,0 +1,334 @@
+
+/* Lost & Found Form */
+
+.lost-form-container {
+  max-width: 750px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.lost-form-header {
+  margin-bottom: 25px;
+}
+
+.lost-form-header h1 {
+  font-size: 30px;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.lost-form-header p {
+  color: #64748b;
+  font-size: 15px;
+}
+
+.approval-notice {
+  padding: 16px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 9px;
+  margin-bottom: 25px;
+}
+
+.approval-notice strong {
+  color: #92400e;
+}
+
+.approval-notice p {
+  color: #a16207;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.lost-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lost-item-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lost-item-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.lost-item-form input,
+.lost-item-form select,
+.lost-item-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.lost-item-form input:focus,
+.lost-item-form select:focus,
+.lost-item-form textarea:focus {
+  border-color: #4f46e5;
+}
+
+.lost-item-form textarea {
+  resize: vertical;
+}
+
+.lost-item-form .form-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.submit-lost-btn {
+  padding: 13px 22px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-lost-btn:hover {
+  background: #4338ca;
+}
+
+.cancel-btn {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.cancel-btn:hover {
+  color: #1e293b;
+}
+
+@media (max-width: 600px) {
+  .lost-form-container {
+    margin: 25px 15px;
+    padding: 20px;
+  }
+
+  .lost-form-header h1 {
+    font-size: 25px;
+  }
+
+  .lost-item-form .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .submit-lost-btn {
+    width: 100%;
+  }
+}
+
+/* =================================
+   LOST & FOUND - PUBLIC LISTING
+================================= */
+
+.lost-list-container {
+  max-width: 1200px;
+  margin: 55px auto;
+  padding: 0 25px;
+  min-height: 400px;
+}
+
+.lost-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lost-list-header h1 {
+  font-size: 36px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  color: #172554;
+  margin-bottom: 10px;
+}
+
+.lost-list-header p {
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.lost-list-header .submit-lost-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 22px;
+  background: #6254e7;
+  color: white;
+  text-decoration: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.lost-list-header .submit-lost-btn:hover {
+  background: #493bd0;
+  transform: translateY(-2px);
+}
+
+/* Items Grid */
+
+.lost-items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.lost-item-card {
+  background: #ffffff;
+  border: 1px solid #e8eaf0;
+  border-radius: 15px;
+  padding: 25px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+}
+
+.lost-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.item-type-badge {
+  display: inline-block;
+  padding: 7px 13px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.item-type-badge.lost {
+  background: #fff0f0;
+  color: #dc2626;
+}
+
+.item-type-badge.found {
+  background: #eafaf1;
+  color: #15803d;
+}
+
+.lost-item-card h2 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #172554;
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.item-category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 650;
+  color: #6254e7;
+  background: #f1efff;
+  padding: 6px 11px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.item-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 22px;
+  overflow-wrap: anywhere;
+}
+
+.item-details {
+  border-top: 1px solid #edf0f4;
+  padding-top: 15px;
+}
+
+.item-details p {
+  color: #64748b;
+  font-size: 13px;
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+}
+
+.item-details strong {
+  color: #334155;
+}
+
+/* Empty State */
+
+.empty-lost-state {
+  text-align: center;
+  padding: 75px 20px;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+}
+
+.empty-lost-state h2 {
+  font-size: 24px;
+  color: #172554;
+  margin-bottom: 12px;
+}
+
+.empty-lost-state p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .lost-items-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .lost-list-container {
+    margin: 30px auto;
+    padding: 0 16px;
+  }
+
+  .lost-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .lost-list-header h1 {
+    font-size: 29px;
+  }
+
+  .lost-list-header .submit-lost-btn {
+    width: 100%;
+  }
+
+  .lost-items-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lost-item-card {
+    padding: 20px;
+  }
+}
+

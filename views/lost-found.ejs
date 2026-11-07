@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Item | CampusHub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/lost-found.css">
+</head>
+<body>
+
+ <%- include("partials/navbar") %>
+
+  <main class="lost-form-container">
+
+    <div class="lost-form-header">
+      <h1>Report an Item</h1>
+      <p>Help the campus community reunite lost items with their owners.</p>
+    </div>
+
+    <div class="approval-notice">
+      <strong>Admin Approval Required</strong>
+      <p>Your report will be published only after admin approval.</p>
+    </div>
+
+    <form action="/lost-found" method="POST" class="lost-item-form">
+
+      <div class="form-group">
+        <label>Report Type</label>
+        <select name="type" required>
+          <option value="">Select Type</option>
+          <option value="Lost">I Lost Something</option>
+          <option value="Found">I Found Something</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Item Name</label>
+        <input
+          type="text"
+          name="title"
+          placeholder="e.g. Black Wallet"
+          maxlength="100"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select name="category" required>
+          <option value="">Select Category</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Documents">Documents</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Books">Books</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          name="description"
+          rows="5"
+          maxlength="2000"
+          placeholder="Describe the item and its identifying features..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Where was it lost or found?"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" name="date" required>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Information</label>
+        <input
+          type="text"
+          name="contact"
+          placeholder="Your contact details"
+          required
+        >
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-lost-btn">
+          Submit for Approval
+        </button>
+
+        <a href="/lost-found" class="cancel-btn">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+
+  <%- include("partials/footer") %>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found | CampusHub</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/lost-found.css">
+</head>
+<body>
+
+  <%- include("partials/navbar") %>
+
+  <main class="lost-list-container">
+
+    <div class="lost-list-header">
+      <div>
+        <h1>Lost & Found</h1>
+        <p>Find your lost belongings or help someone recover theirs.</p>
+      </div>
+
+      <% if (currentUser) { %>
+        <a href="/lost-found/new" class="submit-lost-btn">
+          + Report an Item
+        </a>
+      <% } %>
+    </div>
+
+    <% if (items.length === 0) { %>
+
+      <div class="empty-lost-state">
+        <h2>No Items Available</h2>
+        <p>There are currently no approved Lost & Found reports.</p>
+      </div>
+
+    <% } else { %>
+
+      <div class="lost-items-grid">
+
+        <% items.forEach(item => { %>
+
+          <article class="lost-item-card">
+
+            <span class="item-type-badge <%= item.type.toLowerCase() %>">
+              <%= item.type %>
+            </span>
+
+            <h2><%= item.title %></h2>
+
+            <span class="item-category">
+              <%= item.category %>
+            </span>
+
+            <p class="item-description">
+              <%= item.description %>
+            </p>
+
+            <div class="item-details">
+              <p><strong>Location:</strong> <%= item.location %></p>
+
+              <p>
+                <strong>Date:</strong>
+                <%= new Date(item.date).toLocaleDateString("en-IN") %>
+              </p>
+
+              <p>
+                <strong>Reported By:</strong>
+                <%= item.postedBy ? item.postedBy.name : "Student" %>
+              </p>
+            </div>
+
+          </article>
+
+        <% }) %>
+
+      </div>
+
+    <% } %>
+
+  </main>
+
+  <%- include("partials/footer") %>
+
+</body>
+</html>

@@ -288,3 +288,126 @@
   color: #ffffff;
   transform: translateY(-2px);
 }
+
+/* Lost & Found Listing Page */
+
+.lost-list-container {
+  max-width: 1200px;
+  margin: 45px auto;
+  padding: 0 20px;
+}
+
+.lost-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.lost-list-header h1 {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.lost-list-header p {
+  color: #64748b;
+}
+
+.lost-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 22px;
+}
+
+.lost-item-card {
+  position: relative;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 13px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.item-type-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.item-type-badge.lost {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.item-type-badge.found {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.lost-item-card h2 {
+  color: #1e293b;
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+
+.item-category {
+  display: inline-block;
+  color: #4f46e5;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.item-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  overflow-wrap: anywhere;
+}
+
+.item-details {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.item-details p {
+  color: #475569;
+  font-size: 13px;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.empty-lost-state {
+  text-align: center;
+  padding: 65px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+}
+
+.empty-lost-state h2 {
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.empty-lost-state p {
+  color: #64748b;
+}
+
+@media (max-width: 600px) {
+  .lost-list-header h1 {
+    font-size: 26px;
+  }
+
+  .lost-list-header .submit-lost-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
